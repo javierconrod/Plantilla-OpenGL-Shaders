@@ -33,8 +33,8 @@ Shader::Shader(const char* rutaVertexShader, const char* rutaFragmentShader) {
 	}
 
 	//Cambio de formato string a char*
-	const char* cadenaCodigoVertexShader = codigoVertexShader.c_str;
-	const char* cadenaCodigoFragmentShader = codigoFragmentShader.c_str;
+	const char* cadenaCodigoVertexShader = codigoVertexShader.c_str();
+	const char* cadenaCodigoFragmentShader = codigoFragmentShader.c_str();
 
 	//1.- Crear el programa de shader
 	shaderID = glCreateProgram();

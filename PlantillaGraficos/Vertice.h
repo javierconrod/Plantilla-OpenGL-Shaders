@@ -10,7 +10,7 @@ struct vec4 {
 	float x, y, z, w;
 };
 
-struct vertice {
+struct Vertice {
 	vec3 posicion;
 	vec4 color;
 };
