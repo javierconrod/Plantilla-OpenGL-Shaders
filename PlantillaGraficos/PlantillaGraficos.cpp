@@ -37,11 +37,11 @@ void inicializarTriangulo() {
 	};
 	Vertice v2 = {
 		vec3(-0.3f, -0.3f, 0.0f),
-		vec4(0.0f, 1.0f, 0.0f, 1.0f)
+		vec4(0.0f, 1.0f, 1.0f, 1.0f)
 	};
 	Vertice v3 = {
 		vec3(0.3f, -0.3f, 0.0f),
-		vec4(0.0f, 0.0f, 1.0f, 1.0f)
+		vec4(1.0f, 0.0f, 1.0f, 1.0f)
 	};
 	triangulo.push_back(v1);
 	triangulo.push_back(v2);
@@ -49,7 +49,20 @@ void inicializarTriangulo() {
 }
 
 void dibujar() {
+	//Elegir el shader
+	shader->enlazar();
 
+	//Elegir el vertex array
+	glBindVertexArray(vertexArrayTrianguloID);
+
+	//Dibujar
+	glDrawArrays(GL_TRIANGLES, 0, triangulo.size());
+
+	//Soltar vertex array
+	glBindVertexArray(0);
+
+	//Desenlazar shader
+	shader->desenlazar();
 }
 
 int main()
@@ -104,21 +117,25 @@ int main()
 	//Crear el vertex array del triangulo
 	glGenVertexArrays(1, &vertexArrayTrianguloID);
 	glBindVertexArray(vertexArrayTrianguloID);
-	
+
 	//Vertex buffer
 	glGenBuffers(1, &bufferTrianguloID);
 	glBindBuffer(GL_ARRAY_BUFFER, bufferTrianguloID);
 
 	//Asociar datos al buffer
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertice) * triangulo.size(), triangulo.data(), GL_STATIC_DRAW);
-	
+
 	//Habilitar atributos de shader
 	glEnableVertexAttribArray(posicionID);
 	glEnableVertexAttribArray(colorID);
-	
+
 	//Especificar a OpenGL cómo comunicarse
 	glVertexAttribPointer(posicionID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertice), 0);
+	glVertexAttribPointer(colorID, 4, GL_FLOAT, GL_FALSE, sizeof(Vertice), (void*)sizeof(vec3));
 
+	//Soltar el vertex array y el buffer
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
 	//Ciclo de dibujo (DrawLoop)
@@ -134,6 +151,7 @@ int main()
 
 		//Actualizar valores y dibujar
 		dibujar();
+
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 
